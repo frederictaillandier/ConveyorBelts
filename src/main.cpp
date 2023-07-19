@@ -1,7 +1,8 @@
 #include <iostream>
 #include "../include/return5.h"
 
-auto main(int argc, char** argv) -> int {
-    std::cout << "hello world\n";
+int main()
+{
+    std::cout << return5() << std::endl;
     return 0;
 }

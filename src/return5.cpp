@@ -1,6 +1,5 @@
-#include "../include/return5.h"
 
-// Only used for testing purposes
-auto return5() -> int {
+int return5()
+{
     return 5;
 }
