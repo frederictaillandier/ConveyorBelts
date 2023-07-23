@@ -1,8 +1,14 @@
 #include <iostream>
-#include "../include/return5.h"
+#include <thread>
+#include <unistd.h>
+#include "belt/belt.h"
+#include "belt/ibelt.h"
+
+
 
 int main()
 {
-    std::cout << return5() << std::endl;
+    std::unique_ptr<IBelt> belt = std::make_unique<Belt>();
+    sleep(10);
     return 0;
 }

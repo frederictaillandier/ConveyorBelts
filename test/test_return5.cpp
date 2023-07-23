@@ -1,4 +1,3 @@
-#include <unistd.h>
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include "return5.h"
 #include "doctest.h"
