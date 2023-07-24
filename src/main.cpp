@@ -1,14 +1,12 @@
 #include <iostream>
 #include <thread>
 #include <unistd.h>
-#include "belt/belt.h"
-#include "belt/ibelt.h"
-
-
+#include "belt-factory/belt-factory.h"
 
 int main()
 {
-    std::unique_ptr<IBelt> belt = std::make_unique<Belt>();
-    sleep(10);
+    auto beltFactory = std::make_unique<BeltFactory>();
+    auto belt = beltFactory->withSpeed(2).build();
+    (void)belt;
     return 0;
 }
