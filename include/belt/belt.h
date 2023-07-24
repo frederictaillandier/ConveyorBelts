@@ -1,6 +1,7 @@
 #pragma once
 #include <thread>
 #include <atomic>
+#include <vector>
 #include "belt/ibelt.h"
 
 class Belt : public IBelt
@@ -14,13 +15,22 @@ class Belt : public IBelt
         std::atomic<bool> _killCalled = false;
         std::atomic<bool> _paused = false;
 
+        std::weak_ptr<IBelt> _nextBelt;
+        std::weak_ptr<IBelt> _previousBelt;
+
         void EventLoop();
         void Update();
 
+        std::vector<std::unique_ptr<Luggage>> _luggages;
     public:
         void Resume() override;
         void Pause() override;
         ~Belt() override;
         float GetBeltPosition() const override;
+        void SetNextBelt(std::weak_ptr<IBelt> nextBelt) override;
+        void SetPreviousBelt(std::weak_ptr<IBelt> previousBelt) override;
+        void DropLuggageFront(std::unique_ptr<Luggage> luggage) override;
+        void DropLuggageBack(std::unique_ptr<Luggage> luggage) override;
+        size_t GetLuggageNumber() const override;
     friend class BeltFactory;
 };

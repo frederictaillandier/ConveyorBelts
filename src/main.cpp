@@ -1,12 +1,17 @@
 #include <iostream>
 #include <thread>
 #include <unistd.h>
-#include "belt-factory/belt-factory.h"
+#include <vector>
+#include "belt-room/belt-room.h"
+#include "luggage/luggage.h"
 
 int main()
 {
-    auto beltFactory = std::make_unique<BeltFactory>();
-    auto belt = beltFactory->withSpeed(2).build();
-    (void)belt;
+    BeltRoom beltRoom;
+    beltRoom.BuildBeltRoom(4);
+    
+    beltRoom.DropLuggage(std::make_unique<Luggage>());
+    sleep(15);
+
     return 0;
 }

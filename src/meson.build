@@ -3,6 +3,7 @@ libconveyor = shared_library(
     'return5.cpp', # source files to be compiled
     'belt/belt.cpp',
     'belt-factory/belt-factory.cpp',
+    'belt-room/belt-room.cpp',
     include_directories : inc, # previously declared include directories in root :code:`meson.build`
     install : true) # :code:`libuuid` will be part of project installation
 
