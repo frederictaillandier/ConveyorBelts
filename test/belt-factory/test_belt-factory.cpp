@@ -8,6 +8,6 @@ TEST_CASE("Testing BeltFactory") {
 
     beltFactory->withSpeed(2);
     auto belt = beltFactory->build();
-    sleep(1);
+    std::this_thread::sleep_for(std::chrono::seconds(1));
     CHECK(belt->GetBeltPosition() >= 2);
 }
