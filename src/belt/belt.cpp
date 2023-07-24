@@ -2,11 +2,6 @@
 #include <unistd.h>
 #include "belt/belt.h"
 
-Belt::Belt()
-{
-    thread = std::thread(&Belt::EventLoop, this);
-}
-
 void Belt::EventLoop()
 {
     while (!_killCalled)
@@ -21,11 +16,12 @@ Belt::~Belt()
 {
     _killCalled = true;
     thread.join();
+    std::cout << "Belt destroyed" << std::endl;
 }
 
 void Belt::Update()
 {
-    _beltPosition += _beltSpeed;
+    _beltPosition = _beltPosition + _beltSpeed;
 }
 
 void Belt::Resume()

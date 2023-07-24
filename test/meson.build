@@ -14,9 +14,9 @@ test_belt = executable('test_belt',
     include_directories: inc, link_with : libconveyor)
 test('test_belt', test_belt)
 
-test_mutexed_variable_src = ['./mutexed-variable/test_mutexed-variable.cpp']
-test_mutexed_variable = executable('test_mutexed-variable', 
-    test_mutexed_variable_src, 
+test_belt_factory_src = ['./belt-factory/test_belt-factory.cpp']
+test_belt_factory = executable('test_belt-factory', 
+    test_belt_factory_src, 
     dependencies : [doctest_dep], 
     include_directories: inc, link_with : libconveyor)
-test('test_mutexed_variable', test_mutexed_variable)
+test('test_belt_factory', test_belt_factory)
