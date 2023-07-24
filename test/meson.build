@@ -20,3 +20,10 @@ test_belt_factory = executable('test_belt-factory',
     dependencies : [doctest_dep], 
     include_directories: inc, link_with : libconveyor)
 test('test_belt_factory', test_belt_factory)
+
+test_belt_room_src = ['./belt-room/test_belt-room.cpp']
+test_belt_room = executable('test_belt-room', 
+    test_belt_room_src, 
+    dependencies : [doctest_dep], 
+    include_directories: inc, link_with : libconveyor)
+test('test_belt_room', test_belt_room)
