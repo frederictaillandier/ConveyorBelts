@@ -45,6 +45,12 @@ void Belt::Pause()
     _paused = true;
 }
 
+void Belt::SwitchOnOff()
+{
+    _paused = !_paused;
+}
+
+
 float Belt::GetBeltPosition() const
 {
     return _beltPosition;

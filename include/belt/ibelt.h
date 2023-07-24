@@ -19,6 +19,10 @@ class IBelt
         */
         virtual void Pause() = 0;
         /*
+        @brief switches belt's movement on/off
+        */
+        virtual void SwitchOnOff() = 0;
+        /*
         @brief returns belt's at a given moment
         */
         virtual float GetBeltPosition() const = 0;
