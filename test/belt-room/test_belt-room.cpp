@@ -1,3 +1,4 @@
+#include <thread>
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include "belt-room/belt-room.h"
 #include "doctest.h"
@@ -20,7 +21,7 @@ TEST_CASE("Testing belt room")
 
     beltRoom.BuildBeltRoom(3);
     beltRoom.DropLuggage(std::make_unique<Luggage>());
-    sleep(15);
+    std::this_thread::sleep_for(std::chrono::seconds(11));
     CHECK(beltRoom.GetBelt(1).lock()->GetLuggageNumber() == 1);
     CHECK(beltRoom.GetBelt(0).lock()->GetLuggageNumber() == 0);
 }

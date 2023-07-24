@@ -8,7 +8,7 @@ void Belt::EventLoop()
     {
         if (!_paused)
             Update();
-        sleep(1);
+        std::this_thread::sleep_for(std::chrono::seconds(1));
     }
 }
 
@@ -33,7 +33,6 @@ void Belt::Update()
                 _nextBelt.lock()->DropLuggageFront(std::move(l));
         }
     }
-
 }
 
 void Belt::Resume()

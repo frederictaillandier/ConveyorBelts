@@ -6,17 +6,17 @@ TEST_CASE("Testing Belt") {
   std::unique_ptr<IBelt> belt = std::make_unique<Belt>();
 
   CHECK(belt->GetBeltPosition() <= 0.1f);
-  sleep(2);
+  std::this_thread::sleep_for(std::chrono::seconds(2));
   CHECK(belt->GetBeltPosition() >= 2);
 }
 
 TEST_CASE("Testing Belt Pause/Resume") {
   std::unique_ptr<IBelt> belt = std::make_unique<Belt>();
   belt->Pause();
-  sleep(2);
+  std::this_thread::sleep_for(std::chrono::seconds(2));
   CHECK(belt->GetBeltPosition() <= 0.1f);
   belt->Resume();
-  sleep(3);
+  std::this_thread::sleep_for(std::chrono::seconds(2));
   CHECK(belt->GetBeltPosition() >= 2);
 }
 
@@ -42,7 +42,7 @@ TEST_CASE("Testing dropping between belts")
     belt1->SetNextBelt(belt2);
     belt2->SetPreviousBelt(belt1);
     belt1->DropLuggageBack(std::make_unique<Luggage>());
-    sleep(2);
+    std::this_thread::sleep_for(std::chrono::seconds(2));
     CHECK(belt2->GetLuggageNumber() == 1);
     CHECK(belt1->GetLuggageNumber() == 0);
 }
