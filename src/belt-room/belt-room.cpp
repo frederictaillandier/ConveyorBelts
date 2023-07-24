@@ -2,6 +2,7 @@
 #include <memory>
 #include "belt-room/belt-room.h"
 #include "belt-factory/belt-factory.h"
+#include "input-dispatcher/input-dispatcher.h"
 
 void BeltRoom::BuildBeltRoom(unsigned int const number)
 {
@@ -26,4 +27,18 @@ void BeltRoom::DropLuggage(std::unique_ptr<Luggage> luggage)
 std::weak_ptr<IBelt> BeltRoom::GetBelt(unsigned int const index) 
 {
     return _belts[index];
+}
+
+void BeltRoom::EventLoop()
+{
+    _inputDispatcher->SetOnKeyPressedCallback('l', [this]() {
+        DropLuggage(std::make_unique<Luggage>());
+    });
+    for (unsigned char i = 0; i <= 4; ++i) {
+        _inputDispatcher->SetOnKeyPressedCallback('1' + i, [this, i]() {
+            _belts[i]->SwitchOnOff();
+        });
+    }
+
+    _inputDispatcher->EventLoop();
 }

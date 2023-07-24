@@ -25,6 +25,7 @@ class Belt : public IBelt
     public:
         void Resume() override;
         void Pause() override;
+        void SwitchOnOff() override;
         ~Belt() override;
         float GetBeltPosition() const override;
         void SetNextBelt(std::weak_ptr<IBelt> nextBelt) override;
