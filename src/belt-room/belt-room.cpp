@@ -7,7 +7,9 @@
 void BeltRoom::BuildBeltRoom(unsigned int const number)
 {
     auto beltFactory = std::make_unique<BeltFactory>();
-    
+    std::shared_ptr<IDisplayer> displayer = _displayer;
+
+    beltFactory->withDisplayer(displayer);
     beltFactory->withSpeed(1);
     for (size_t i = 0; i < number -1; ++i)
         _belts.push_back(beltFactory->build());
@@ -32,7 +34,9 @@ std::weak_ptr<IBelt> BeltRoom::GetBelt(unsigned int const index)
 void BeltRoom::EventLoop()
 {
     _inputDispatcher->SetOnKeyPressedCallback('l', [this]() {
-        DropLuggage(std::make_unique<Luggage>());
+        auto luggage = std::make_unique<Luggage>();
+        luggage->id = _id_counter++;
+        DropLuggage(std::move(luggage));
     });
     for (unsigned char i = 0; i <= 4; ++i) {
         _inputDispatcher->SetOnKeyPressedCallback('1' + i, [this, i]() {

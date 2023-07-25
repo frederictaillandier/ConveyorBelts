@@ -6,6 +6,7 @@ libconveyor = shared_library(
     'belt-room/belt-room.cpp',
     'input-dispatcher/input-dispatcher.cpp',
     'utils/my-getch.cpp',
+    'displayer/displayer.cpp',
     include_directories : inc, # previously declared include directories in root :code:`meson.build`
     install : true) # :code:`libuuid` will be part of project installation
 

@@ -10,6 +10,11 @@ class IBelt
 {
     public:      
         virtual ~IBelt() = default;
+
+        /*
+        @brief returns Id
+        */
+        virtual unsigned int GetId() const = 0;
         /*
         @brief resumes belt's movement
         */
@@ -18,6 +23,10 @@ class IBelt
         @brief pauses belt's movement
         */
         virtual void Pause() = 0;
+        /*
+        @brief reverse belt's movement
+        */
+        virtual void Reverse() = 0;
         /*
         @brief switches belt's movement on/off
         */

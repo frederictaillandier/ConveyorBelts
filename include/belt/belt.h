@@ -3,10 +3,13 @@
 #include <atomic>
 #include <vector>
 #include "belt/ibelt.h"
+#include "displayer/idisplayer.h"
 
 class Belt : public IBelt
 {
     private:
+        unsigned int _id;
+        
         std::thread thread = std::thread(&Belt::EventLoop, this);
         constexpr static float beltSize = 10;
         float _beltSpeed = 1;
@@ -17,14 +20,21 @@ class Belt : public IBelt
 
         std::weak_ptr<IBelt> _nextBelt;
         std::weak_ptr<IBelt> _previousBelt;
+        std::shared_ptr<IDisplayer> _displayer;
+        
+        std::vector<std::unique_ptr<Luggage>> _luggages;
+        std::vector<std::unique_ptr<Luggage>> _fallingLuggages;
+        std::mutex _fallingLuggagesMutex;
 
         void EventLoop();
         void Update();
+        void ProcessFallingLuggages();
 
-        std::vector<std::unique_ptr<Luggage>> _luggages;
     public:
+        unsigned int GetId() const override;
         void Resume() override;
         void Pause() override;
+        void Reverse() override;
         void SwitchOnOff() override;
         ~Belt() override;
         float GetBeltPosition() const override;
