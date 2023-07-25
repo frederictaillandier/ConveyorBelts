@@ -8,7 +8,7 @@ void Belt::EventLoop()
     {
         if (!_paused)
             Update();
-        std::this_thread::sleep_for(std::chrono::seconds(1));
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
 }
 
@@ -19,19 +19,50 @@ Belt::~Belt()
     std::cout << "Belt destroyed" << std::endl;
 }
 
+unsigned int Belt::GetId() const
+{
+    return _id;
+}
+
+void Belt::ProcessFallingLuggages()
+{
+    std::lock_guard<std::mutex> lock(_fallingLuggagesMutex);
+    _luggages.insert(_luggages.end(), 
+        std::make_move_iterator(_fallingLuggages.begin()), 
+        std::make_move_iterator(_fallingLuggages.end())
+    );
+    _fallingLuggages.clear();
+}
+
 void Belt::Update()
 {
-    _beltPosition = _beltPosition + _beltSpeed;
+    ProcessFallingLuggages();
     for (unsigned int i = 0; i < _luggages.size(); ++i)
     {
-        _luggages[i]->position += _beltSpeed;
-        if (_luggages[i]->position >= beltSize)
+        _luggages[i]->position += _beltSpeed * 0.1f;
+        if (_luggages[i]->position > beltSize)
         {
             auto l = std::move(_luggages[i]);
+            l->position = 0;
             _luggages.erase(_luggages.begin() + i);
-            if (_nextBelt.lock())
+            if (_nextBelt.lock()) {
                 _nextBelt.lock()->DropLuggageFront(std::move(l));
+            }            
         }
+        else if (_luggages[i]->position < 0)
+        {
+            auto l = std::move(_luggages[i]);
+            l->position = beltSize;
+            _luggages.erase(_luggages.begin() + i);
+            if (_previousBelt.lock()) {
+                _previousBelt.lock()->DropLuggageBack(std::move(l));
+            }
+        }
+        else {
+            if (_displayer)
+                _displayer->OnLuggageMove(_luggages[i]->id, _id, _luggages[i]->position);
+        }
+
     }
 }
 
@@ -45,11 +76,15 @@ void Belt::Pause()
     _paused = true;
 }
 
+void Belt::Reverse()
+{
+    _beltSpeed = -_beltSpeed;
+}
+
 void Belt::SwitchOnOff()
 {
     _paused = !_paused;
 }
-
 
 float Belt::GetBeltPosition() const
 {
@@ -68,16 +103,14 @@ void Belt::SetPreviousBelt(std::weak_ptr<IBelt> previousBelt)
 
 void Belt::DropLuggageFront(std::unique_ptr<Luggage> luggage)
 {
-    luggage->position = 0;
-    _luggages.insert(_luggages.begin(), std::move(luggage));
-    std::cout << "Drop Front" << std::endl;
+    std::lock_guard<std::mutex> lock(_fallingLuggagesMutex);
+    _fallingLuggages.push_back(std::move(luggage));
 }
 
 void Belt::DropLuggageBack(std::unique_ptr<Luggage> luggage)
 {
-    luggage->position = 10;
-    _luggages.push_back(std::move(luggage));
-    std::cout << "Drop Back" << std::endl;
+    std::lock_guard<std::mutex> lock(_fallingLuggagesMutex);
+    _fallingLuggages.push_back(std::move(luggage));
 }
 
 size_t Belt::GetLuggageNumber() const

@@ -1,5 +1,7 @@
 #pragma once
 
 struct Luggage {
-    float position;
+    public: 
+       float id;
+       float position;
 };
