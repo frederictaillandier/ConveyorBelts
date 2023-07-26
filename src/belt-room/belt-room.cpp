@@ -12,8 +12,8 @@ void BeltRoom::BuildBeltRoom(unsigned int const number)
     beltFactory->withDisplayer(displayer);
     beltFactory->withSpeed(1);
     for (size_t i = 0; i < number -1; ++i)
-        _belts.push_back(beltFactory->build());
-    _belts.push_back(beltFactory->withSpeed(2).build());
+        _belts.emplace_back(beltFactory->build());
+    _belts.emplace_back(beltFactory->withSpeed(2).build());
 
     for (size_t i = 0; i < _belts.size(); ++i) {
         _belts[i]->SetNextBelt(_belts[(i + 1) % _belts.size()]);

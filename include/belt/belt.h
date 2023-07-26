@@ -14,7 +14,6 @@ class Belt : public IBelt
         constexpr static float beltSize = 10;
         float _beltSpeed = 1;
 
-        std::atomic<float> _beltPosition = 0.0f;
         std::atomic<bool> _killCalled = false;
         std::atomic<bool> _paused = false;
 
@@ -37,7 +36,6 @@ class Belt : public IBelt
         void Reverse() override;
         void SwitchOnOff() override;
         ~Belt() override;
-        float GetBeltPosition() const override;
         void SetNextBelt(std::weak_ptr<IBelt> nextBelt) override;
         void SetPreviousBelt(std::weak_ptr<IBelt> previousBelt) override;
         void DropLuggageFront(std::unique_ptr<Luggage> luggage) override;

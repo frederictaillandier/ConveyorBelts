@@ -1,13 +1,16 @@
 #include <iostream>
+#include <mutex>
 #include "luggage/luggage.h"
 #include "belt/ibelt.h" 
 #include "displayer/displayer.h"
 
 void Displayer::ClearScreen()
 {
+#ifndef NODISPLAYER 
     std::cout << "\033[2J";
     std::cout << _displayCache.str();
     _displayCache.str("");
+#endif
 }
 
 Displayer::~Displayer()
@@ -21,8 +24,8 @@ void Displayer::GenerateDisplay()
 {
     std::map<int, int> numberOnBelts;
 
-    for (auto const &l : _luggages) {
-        _displayCache << "L" << l.first << " " << std::get<0>(l.second) << " " << std::get<1>(l.second) << std::endl;
+    for (auto const &[first, second] : _luggages) {
+        _displayCache << "L" << first << " " << std::get<0>(second) << " " << std::get<1>(second) << std::endl;
     }
 }
 
@@ -38,8 +41,8 @@ void Displayer::EventLoop()
 }
 
 void Displayer::TreatEvents() {
-    std::lock_guard<std::mutex> lock(_event_queue_mutex);
-    for (auto func : _event_queue) {
+    std::scoped_lock lock(_event_queue_mutex);
+    for (auto const &func : _event_queue) {
         func();
     }
     _event_queue.clear();
@@ -47,8 +50,8 @@ void Displayer::TreatEvents() {
 
 void Displayer::OnLuggageMove(unsigned int const id, unsigned const beltId, float const position)
 {
-    std::lock_guard<std::mutex> lock(_event_queue_mutex);
-    _event_queue.push_back([this, id, beltId, position](){
+    std::scoped_lock lock(_event_queue_mutex);
+    _event_queue.emplace_back([this, id, beltId, position](){
         UpdateLuggagePosition(id, beltId, position);
     });
 }

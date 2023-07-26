@@ -11,7 +11,7 @@ TEST_CASE("Testing belt room with 3 luggages")
     beltRoom.DropLuggage(std::make_unique<Luggage>());
     beltRoom.DropLuggage(std::make_unique<Luggage>());
     beltRoom.DropLuggage(std::make_unique<Luggage>());
-
+    std::this_thread::sleep_for(std::chrono::seconds(1));
     CHECK(beltRoom.GetBelt(0).lock()->GetLuggageNumber() == 3);
 }
 
