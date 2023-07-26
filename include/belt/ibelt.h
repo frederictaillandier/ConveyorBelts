@@ -32,10 +32,6 @@ class IBelt
         */
         virtual void SwitchOnOff() = 0;
         /*
-        @brief returns belt's at a given moment
-        */
-        virtual float GetBeltPosition() const = 0;
-        /*
         @brief sets the next belt in the chain
         */
         virtual void SetNextBelt(std::weak_ptr<IBelt> nextBelt) = 0;

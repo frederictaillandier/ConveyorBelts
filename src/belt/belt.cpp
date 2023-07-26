@@ -1,4 +1,5 @@
 #include <iostream>
+#include <mutex>
 #include <unistd.h>
 #include "belt/belt.h"
 
@@ -26,7 +27,7 @@ unsigned int Belt::GetId() const
 
 void Belt::ProcessFallingLuggages()
 {
-    std::lock_guard<std::mutex> lock(_fallingLuggagesMutex);
+    std::scoped_lock lock(_fallingLuggagesMutex);
     _luggages.insert(_luggages.end(), 
         std::make_move_iterator(_fallingLuggages.begin()), 
         std::make_move_iterator(_fallingLuggages.end())
@@ -86,11 +87,6 @@ void Belt::SwitchOnOff()
     _paused = !_paused;
 }
 
-float Belt::GetBeltPosition() const
-{
-    return _beltPosition;
-}
-
 void Belt::SetNextBelt(std::weak_ptr<IBelt> nextBelt)
 {
     _nextBelt = nextBelt;
@@ -103,14 +99,14 @@ void Belt::SetPreviousBelt(std::weak_ptr<IBelt> previousBelt)
 
 void Belt::DropLuggageFront(std::unique_ptr<Luggage> luggage)
 {
-    std::lock_guard<std::mutex> lock(_fallingLuggagesMutex);
-    _fallingLuggages.push_back(std::move(luggage));
+    std::scoped_lock lock(_fallingLuggagesMutex);
+    _fallingLuggages.emplace_back(std::move(luggage));
 }
 
 void Belt::DropLuggageBack(std::unique_ptr<Luggage> luggage)
 {
-    std::lock_guard<std::mutex> lock(_fallingLuggagesMutex);
-    _fallingLuggages.push_back(std::move(luggage));
+    std::scoped_lock lock(_fallingLuggagesMutex);
+    _fallingLuggages.emplace_back(std::move(luggage));
 }
 
 size_t Belt::GetLuggageNumber() const
