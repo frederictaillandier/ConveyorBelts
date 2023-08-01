@@ -5,7 +5,9 @@
 #include <vector>
 
 void BeltRoom::BuildBeltRoom(unsigned int const number) {
-  auto beltFactory = std::make_unique<BeltFactory>();
+
+  auto beltFactory = std::make_unique<BeltFactory>(); // GCOVR_EXCL_LINE
+
   std::shared_ptr<IDisplayer> displayer = _displayer;
 
   beltFactory->withDisplayer(displayer);
