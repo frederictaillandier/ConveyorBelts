@@ -22,13 +22,12 @@ Displayer::~Displayer() {
 }
 
 void Displayer::GenerateDisplay() {
-  std::stringstream display_luggages;
-  std::stringstream display_belts;
-
   if (_luggages.empty()) {
     _displayCache << "No luggages" << std::endl;
     return;
   }
+  std::stringstream display_luggages;
+  std::stringstream display_belts;
   std::map<int, int> luggages_on_belts;
 
   for (auto const &[luggage_id, luggage] : _luggages) {
