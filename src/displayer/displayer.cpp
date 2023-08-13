@@ -53,6 +53,8 @@ void Displayer::GenerateDisplay() {
     display_belts << "B" << beltId << " " << luggage_count << " ";
 #endif // _GNUC__ > 12
   }
+  _displayCache << display_belts.str() << std::endl;
+  _displayCache << display_luggages.str() << std::endl;
 }
 
 void Displayer::EventLoop() {
@@ -83,6 +85,5 @@ void Displayer::OnLuggageMove(unsigned int const id, unsigned const beltId,
 void Displayer::UpdateLuggagePosition(unsigned int const id,
                                       unsigned const beltId,
                                       float const position) {
-
   _luggages[id] = {beltId, position};
 }

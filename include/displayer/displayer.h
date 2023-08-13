@@ -26,7 +26,7 @@ class Displayer : public IDisplayer {
   void ClearScreen();
 
 public:
-  ~Displayer();
+  ~Displayer() final;
   void EventLoop() override;
   void OnLuggageMove(unsigned int const id, unsigned int const beltId,
                      float const position) override;
