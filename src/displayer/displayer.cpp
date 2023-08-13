@@ -53,8 +53,9 @@ void Displayer::GenerateDisplay() {
     display_belts << "B" << beltId << " " << luggage_count << " ";
 #endif // _GNUC__ > 12
   }
-  _displayCache << display_belts.str() << std::endl;
-  _displayCache << display_luggages.str() << std::endl;
+
+  _displayCache << display_belts.str() << std::endl
+                << display_luggages.str() << std::endl;
 }
 
 void Displayer::EventLoop() {
