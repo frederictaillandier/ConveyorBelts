@@ -1,12 +1,15 @@
 #include "displayer/displayer.h"
 #include "belt/ibelt.h"
 #include "luggage/luggage.h"
+#if _GNUC__ > 13
+#include <format>
+#endif
 #include <iostream>
 #include <mutex>
 
 void Displayer::ClearScreen() {
 #ifndef NODISPLAYER
-  std::cout << "\033[2J";
+  std::cout << CLEAR_SCREEN;
   std::cout << _displayCache.str();
   _displayCache.str("");
 #endif
@@ -23,9 +26,32 @@ void Displayer::GenerateDisplay() {
     _displayCache << "No luggages" << std::endl;
     return;
   }
-  for (auto const &[first, second] : _luggages) {
-    _displayCache << "L" << first << " " << std::get<0>(second) << " "
-                  << std::get<1>(second) << std::endl;
+  std::stringstream display_luggages;
+  std::stringstream display_belts;
+  std::map<int, int> luggages_on_belts;
+
+  for (auto const &[luggage_id, luggage] : _luggages) {
+    auto const &[beltId, position] = luggage;
+
+    if (luggages_on_belts.contains(beltId) == false) {
+      luggages_on_belts[beltId] = 0;
+    }
+    luggages_on_belts[beltId]++;
+
+#if _GNUC__ > 12
+    display_luggages << std::format("L{} {} {}\n", luggage_id, beltId,
+                                    position);
+#else
+    display_luggages << "L" << luggage_id << " " << beltId << " " << position
+                     << std::endl;
+#endif // _GNUC__ > 12
+  }
+  for (auto const &[beltId, luggage_count] : luggages_on_belts) {
+#if _GNUC__ > 12
+    display_belts << std::format("B{} {}\n", beltId, luggage_count);
+#else
+    display_belts << "B" << beltId << " " << luggage_count << " ";
+#endif // _GNUC__ > 12
   }
 }
 

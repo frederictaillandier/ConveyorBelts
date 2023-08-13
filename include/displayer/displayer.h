@@ -8,7 +8,9 @@
 
 class Displayer : public IDisplayer {
 
-  std::thread _thread = std::thread(&Displayer::EventLoop, this);
+  static constexpr char CLEAR_SCREEN[] = "\033[2J\033[1;1H";
+
+  std::jthread _thread = std::jthread(&Displayer::EventLoop, this);
   std::atomic<bool> _killCalled = false;
 
   std::mutex _event_queue_mutex;
