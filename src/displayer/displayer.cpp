@@ -19,8 +19,10 @@ Displayer::~Displayer() {
 }
 
 void Displayer::GenerateDisplay() {
-  std::map<int, int> numberOnBelts;
-
+  if (_luggages.empty()) {
+    _displayCache << "No luggages" << std::endl;
+    return;
+  }
   for (auto const &[first, second] : _luggages) {
     _displayCache << "L" << first << " " << std::get<0>(second) << " "
                   << std::get<1>(second) << std::endl;
