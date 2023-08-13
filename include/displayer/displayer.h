@@ -8,7 +8,7 @@
 
 class Displayer : public IDisplayer {
 
-  std::thread _thread = std::thread(&Displayer::EventLoop, this);
+  std::jthread _thread = std::jthread(&Displayer::EventLoop, this);
   std::atomic<bool> _killCalled = false;
 
   std::mutex _event_queue_mutex;
@@ -24,7 +24,7 @@ class Displayer : public IDisplayer {
   void ClearScreen();
 
 public:
-  ~Displayer();
+  ~Displayer() final;
   void EventLoop() override;
   void OnLuggageMove(unsigned int const id, unsigned int const beltId,
                      float const position) override;

@@ -19,12 +19,31 @@ Displayer::~Displayer() {
 }
 
 void Displayer::GenerateDisplay() {
-  std::map<int, int> numberOnBelts;
+  std::stringstream display_luggages;
+  std::stringstream display_belts;
 
-  for (auto const &[first, second] : _luggages) {
-    _displayCache << "L" << first << " " << std::get<0>(second) << " "
-                  << std::get<1>(second) << std::endl;
+  if (_luggages.empty()) {
+    _displayCache << "No luggages" << std::endl;
+    return;
   }
+  std::map<int, int> luggages_on_belts;
+
+  for (auto const &[luggage_id, luggage] : _luggages) {
+    auto const &[beltId, position] = luggage;
+
+    if (luggages_on_belts.contains(beltId) == false) {
+      luggages_on_belts[beltId] = 0;
+    }
+    luggages_on_belts[beltId]++;
+
+    display_luggages << "L" << luggage_id << " " << beltId << " " << position
+                     << std::endl;
+  }
+  for (auto const &[beltId, luggage_count] : luggages_on_belts) {
+    display_belts << "B" << beltId << " " << luggage_count << " ";
+  }
+  _displayCache << display_belts.str() << std::endl;
+  _displayCache << display_luggages.str() << std::endl;
 }
 
 void Displayer::EventLoop() {
@@ -55,6 +74,5 @@ void Displayer::OnLuggageMove(unsigned int const id, unsigned const beltId,
 void Displayer::UpdateLuggagePosition(unsigned int const id,
                                       unsigned const beltId,
                                       float const position) {
-
   _luggages[id] = {beltId, position};
 }
