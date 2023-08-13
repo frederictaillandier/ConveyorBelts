@@ -20,17 +20,6 @@ void BeltRoom::BuildBeltRoom(unsigned int const number) {
     _belts[i]->SetNextBelt(_belts[(i + 1) % _belts.size()]);
     _belts[i]->SetPreviousBelt(_belts[(i - 1 + _belts.size()) % _belts.size()]);
   }
-}
-
-void BeltRoom::DropLuggage(std::unique_ptr<Luggage> luggage) {
-  _belts[0].get()->DropLuggageFront(std::move(luggage));
-}
-
-std::weak_ptr<IBelt> BeltRoom::GetBelt(unsigned int const index) {
-  return _belts[index];
-}
-
-void BeltRoom::EventLoop() {
   _inputDispatcher->SetOnKeyPressedCallback(
       IInputDispatcher::LUGGAGE_KEY, [this]() {
         auto luggage = std::make_unique<Luggage>();
@@ -42,6 +31,14 @@ void BeltRoom::EventLoop() {
         IInputDispatcher::BELT_1_KEY + i,
         [this, i]() { _belts[i]->SwitchOnOff(); });
   }
-
-  _inputDispatcher->EventLoop();
 }
+
+void BeltRoom::DropLuggage(std::unique_ptr<Luggage> luggage) {
+  _belts[0].get()->DropLuggageFront(std::move(luggage));
+}
+
+std::weak_ptr<IBelt> BeltRoom::GetBelt(unsigned int const index) {
+  return _belts[index];
+}
+
+void BeltRoom::EventLoop() { _inputDispatcher->EventLoop(); }
