@@ -2,11 +2,11 @@
 small C++ exercise with conveyor belts
 
 # building
-> meson build
+> meson build\
 > meson compile -C build
 
 # tests
-> cd build
+> cd build\
 > ninja test
 
 # example
