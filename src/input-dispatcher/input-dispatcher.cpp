@@ -9,7 +9,7 @@ void InputDispatcher::SetOnKeyPressedCallback(
 void InputDispatcher::EventLoop() {
   while (true) {
     char keyPressed = my_getch();
-    if (keyPressed == 'q')
+    if (keyPressed == QUIT_KEY)
       return;
     if (_callbacks.find(keyPressed) != _callbacks.end()) {
       _callbacks[keyPressed]();

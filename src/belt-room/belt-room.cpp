@@ -31,14 +31,16 @@ std::weak_ptr<IBelt> BeltRoom::GetBelt(unsigned int const index) {
 }
 
 void BeltRoom::EventLoop() {
-  _inputDispatcher->SetOnKeyPressedCallback('l', [this]() {
-    auto luggage = std::make_unique<Luggage>();
-    luggage->id = _id_counter++;
-    DropLuggage(std::move(luggage));
-  });
-  for (unsigned char i = 0; i <= 4; ++i) {
+  _inputDispatcher->SetOnKeyPressedCallback(
+      IInputDispatcher::LUGGAGE_KEY, [this]() {
+        auto luggage = std::make_unique<Luggage>();
+        luggage->id = _id_counter++;
+        DropLuggage(std::move(luggage));
+      });
+  for (unsigned char i = 0; i <= BELT_NUMBER; ++i) {
     _inputDispatcher->SetOnKeyPressedCallback(
-        '1' + i, [this, i]() { _belts[i]->SwitchOnOff(); });
+        IInputDispatcher::BELT_1_KEY + i,
+        [this, i]() { _belts[i]->SwitchOnOff(); });
   }
 
   _inputDispatcher->EventLoop();

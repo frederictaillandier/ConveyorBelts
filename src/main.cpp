@@ -7,7 +7,7 @@
 
 int main() {
   BeltRoom beltRoom;
-  beltRoom.BuildBeltRoom(4);
+  beltRoom.BuildBeltRoom(BeltRoom::BELT_NUMBER);
   beltRoom.DropLuggage(std::make_unique<Luggage>());
   beltRoom.EventLoop();
   return 0;
