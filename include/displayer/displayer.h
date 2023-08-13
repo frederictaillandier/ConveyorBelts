@@ -8,6 +8,8 @@
 
 class Displayer : public IDisplayer {
 
+  static constexpr char CLEAR_SCREEN[] = "\033[2J\033[1;1H";
+
   std::jthread _thread = std::jthread(&Displayer::EventLoop, this);
   std::atomic<bool> _killCalled = false;
 
