@@ -4,7 +4,6 @@
 #include <vector>
 
 class BeltRoom {
-
   std::vector<std::shared_ptr<IBelt>> _belts;
   std::unique_ptr<IInputDispatcher> _inputDispatcher =
       std::make_unique<InputDispatcher>();
@@ -12,6 +11,8 @@ class BeltRoom {
   unsigned int _id_counter = 1;
 
 public:
+  static int constexpr BELT_NUMBER = 4;
+
   void BuildBeltRoom(unsigned int const number);
   void DropLuggage(std::unique_ptr<Luggage> luggage);
   std::weak_ptr<IBelt> GetBelt(unsigned int const index);
