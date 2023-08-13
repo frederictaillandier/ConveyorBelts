@@ -3,5 +3,5 @@
 struct Luggage {
 public:
   unsigned int id;
-  float position;
+  float position = 0;
 };

@@ -10,7 +10,7 @@ private:
   unsigned int _id;
 
   std::jthread thread = std::jthread(&Belt::EventLoop, this);
-  constexpr static float beltSize = 10;
+  constexpr static float BELT_SIZE = 10;
   float _beltSpeed = 1;
 
   std::atomic<bool> _killCalled = false;
@@ -21,12 +21,14 @@ private:
   std::shared_ptr<IDisplayer> _displayer;
 
   std::vector<std::unique_ptr<Luggage>> _luggages;
+  std::atomic<size_t> _luggagesCount = 0;
   std::vector<std::unique_ptr<Luggage>> _fallingLuggages;
   std::mutex _fallingLuggagesMutex;
 
   void EventLoop();
   void Update();
   void ProcessFallingLuggages();
+  void ProcessLuggagesOnBelt();
 
 public:
   unsigned int GetId() const override;

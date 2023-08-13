@@ -22,7 +22,7 @@ TEST_CASE("Testing dropping between belts") {
 
   belt1->SetNextBelt(belt2);
   belt2->SetPreviousBelt(belt1);
-  belt1->DropLuggageBack(std::make_unique<Luggage>());
+  belt1->DropLuggageFront(std::make_unique<Luggage>());
   std::this_thread::sleep_for(std::chrono::seconds(12));
 
   CHECK(belt1->GetLuggageNumber() == 0);

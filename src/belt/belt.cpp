@@ -1,4 +1,5 @@
 #include "belt/belt.h"
+#include <algorithm>
 #include <iostream>
 #include <mutex>
 #include <unistd.h>
@@ -27,30 +28,30 @@ void Belt::ProcessFallingLuggages() {
   _fallingLuggages.clear();
 }
 
+void Belt::ProcessLuggagesOnBelt() {
+
+  auto end_iterator = std::ranges::remove_if(_luggages, [this](auto &luggage) {
+    luggage->position += _beltSpeed * 0.1f;
+    if (luggage->position > BELT_SIZE && _nextBelt.lock()) {
+      luggage->position = 0;
+      _nextBelt.lock()->DropLuggageFront(std::move(luggage));
+      return true;
+    } else if (luggage->position < -0.01f && _previousBelt.lock()) {
+      luggage->position = BELT_SIZE;
+      _previousBelt.lock()->DropLuggageBack(std::move(luggage));
+      return true;
+    } else if (_displayer) {
+      _displayer->OnLuggageMove(luggage->id, _id, luggage->position);
+    }
+    return false;
+  });
+  _luggages.erase(end_iterator.begin(), _luggages.end());
+  _luggagesCount = _luggages.size();
+}
+
 void Belt::Update() {
   ProcessFallingLuggages();
-  for (unsigned int i = 0; i < _luggages.size(); ++i) {
-    _luggages[i]->position += _beltSpeed * 0.1f;
-    if (_luggages[i]->position > beltSize) {
-      auto l = std::move(_luggages[i]);
-      l->position = 0;
-      _luggages.erase(_luggages.begin() + i);
-      if (_nextBelt.lock()) {
-        _nextBelt.lock()->DropLuggageFront(std::move(l));
-      }
-    } else if (_luggages[i]->position < 0) {
-      auto l = std::move(_luggages[i]);
-      l->position = beltSize;
-      _luggages.erase(_luggages.begin() + i);
-      if (_previousBelt.lock()) {
-        _previousBelt.lock()->DropLuggageBack(std::move(l));
-      }
-    } else {
-      if (_displayer)
-        _displayer->OnLuggageMove(_luggages[i]->id, _id,
-                                  _luggages[i]->position);
-    }
-  }
+  ProcessLuggagesOnBelt();
 }
 
 void Belt::Resume() { _paused = false; }
@@ -77,4 +78,4 @@ void Belt::DropLuggageBack(std::unique_ptr<Luggage> luggage) {
   _fallingLuggages.emplace_back(std::move(luggage));
 }
 
-size_t Belt::GetLuggageNumber() const { return _luggages.size(); }
+size_t Belt::GetLuggageNumber() const { return _luggagesCount; }
