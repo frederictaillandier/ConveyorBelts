@@ -7,7 +7,7 @@
 
 class Belt : public IBelt {
 private:
-  unsigned int _id;
+  unsigned int _id = 0;
 
   std::jthread thread = std::jthread(&Belt::EventLoop, this);
   constexpr static float BELT_SIZE = 10;

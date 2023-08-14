@@ -4,9 +4,20 @@
 
 class IBeltFactory {
 public:
-  virtual std::unique_ptr<IBelt> build() const = 0;
-  virtual IBeltFactory &withSpeed(float speed) = 0;
+  /*
+   * Builds a belt with the given parameters.
+   */
+  virtual std::unique_ptr<IBelt> Build() const = 0;
+
+  /*
+   * Sets the speed of the next belt to be built.
+   */
+  virtual IBeltFactory &WithSpeed(float speed) = 0;
+
+  /*
+   * Sets the displayer of the next belt to be built.
+   */
   virtual IBeltFactory &
-  withDisplayer(std::shared_ptr<IDisplayer> displayer) = 0;
+  WithDisplayer(std::shared_ptr<IDisplayer> displayer) = 0;
   virtual ~IBeltFactory() = default;
 };
