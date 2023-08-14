@@ -1,4 +1,5 @@
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
+#include "belt-factory/belt-factory.h"
 #include "belt/belt.h"
 #include "doctest.h"
 
@@ -14,6 +15,25 @@ TEST_CASE("Testing Belt next/previous") {
     CHECK(weakBelt.lock() == belt1);
   }
   CHECK(weakBelt.lock() == nullptr);
+}
+
+TEST_CASE("Testing Get Id") {
+  Belt belt1;
+
+  CHECK(belt1.GetId() == 0);
+}
+
+TEST_CASE("Testing pause/resume") {
+  BeltFactory beltFactory;
+  beltFactory.WithSpeed(10);
+  auto belt = beltFactory.Build();
+
+  belt->Pause();
+  belt->DropLuggageBack(std::make_unique<Luggage>());
+  CHECK(belt->GetLuggageNumber() == 0);
+  belt->Resume();
+  std::this_thread::sleep_for(std::chrono::seconds(2));
+  CHECK(belt->GetLuggageNumber() == 1);
 }
 
 TEST_CASE("Testing dropping between belts") {
