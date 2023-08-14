@@ -11,7 +11,7 @@ void InputDispatcher::EventLoop() {
     char keyPressed = my_getch();
     if (keyPressed == QUIT_KEY)
       return;
-    if (_callbacks.find(keyPressed) != _callbacks.end()) {
+    if (_callbacks.contains(keyPressed)) {
       _callbacks[keyPressed]();
     }
   }

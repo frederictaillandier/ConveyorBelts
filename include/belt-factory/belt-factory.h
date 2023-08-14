@@ -9,7 +9,7 @@ class BeltFactory : public IBeltFactory {
   std::shared_ptr<IDisplayer> _displayer;
 
 public:
-  std::unique_ptr<IBelt> build() const override;
-  IBeltFactory &withSpeed(float speed) override;
-  IBeltFactory &withDisplayer(std::shared_ptr<IDisplayer> displayer) override;
+  std::unique_ptr<IBelt> Build() const override;
+  IBeltFactory &WithSpeed(float speed) override;
+  IBeltFactory &WithDisplayer(std::shared_ptr<IDisplayer> displayer) override;
 };

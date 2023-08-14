@@ -1,6 +1,6 @@
 #include "belt-factory/belt-factory.h"
 
-std::unique_ptr<IBelt> BeltFactory::build() const {
+std::unique_ptr<IBelt> BeltFactory::Build() const {
   auto belt = std::make_unique<Belt>();
   belt->_id = _id_counter++;
   belt->_beltSpeed = _speed;
@@ -8,13 +8,13 @@ std::unique_ptr<IBelt> BeltFactory::build() const {
   return belt;
 }
 
-IBeltFactory &BeltFactory::withSpeed(float speed) {
+IBeltFactory &BeltFactory::WithSpeed(float speed) {
   _speed = speed;
   return *this;
 }
 
 IBeltFactory &
-BeltFactory::withDisplayer(std::shared_ptr<IDisplayer> displayer) {
+BeltFactory::WithDisplayer(std::shared_ptr<IDisplayer> displayer) {
   _displayer = displayer;
   return *this;
 }
