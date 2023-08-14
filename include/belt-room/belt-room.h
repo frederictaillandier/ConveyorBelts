@@ -1,20 +1,20 @@
+#include "belt-room/ibelt-room.h"
 #include "belt/ibelt.h"
 #include "displayer/displayer.h"
 #include "input-dispatcher/input-dispatcher.h"
 #include <vector>
 
-class BeltRoom {
+class BeltRoom : public IBeltRoom {
   std::vector<std::shared_ptr<IBelt>> _belts;
   std::unique_ptr<IInputDispatcher> _inputDispatcher =
       std::make_unique<InputDispatcher>();
-  std::shared_ptr<IDisplayer> _displayer = std::make_shared<Displayer>();
   unsigned int _id_counter = 1;
+  std::shared_ptr<IDisplayer> _displayer;
 
 public:
-  static int constexpr BELT_NUMBER = 4;
-
-  void BuildBeltRoom(unsigned int const number);
-  void DropLuggage(std::unique_ptr<Luggage> luggage);
-  std::weak_ptr<IBelt> GetBelt(unsigned int const index);
-  void EventLoop();
+  void BuildBeltRoom() override;
+  void AddBelt(std::unique_ptr<IBelt> belt) override;
+  void AddLuggage(std::unique_ptr<Luggage> luggage) override;
+  std::weak_ptr<IBelt> GetBelt(unsigned int const index) const override;
+  void EventLoop() override;
 };
